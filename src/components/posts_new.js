@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import { Link } from 'react-router-dom';
 
 class PostsNew extends Component {
   static get propTypes() {
@@ -41,6 +42,7 @@ class PostsNew extends Component {
           label="Content"
           component={this.renderField} />
         <button type="submit" className="btn btn-primary">Submit</button>
+        <Link to="/" classname="btn btn-danger">Cancel</Link>
       </form>
     );
   }
