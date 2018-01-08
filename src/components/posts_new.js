@@ -1,20 +1,36 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 
 class PostsNew extends Component {
+  static get propTypes() {
+    return {
+      handleSubmit: PropTypes.func
+    };
+  }
+
   renderField(field) {
+    const { meta: { touched, error } } = field;
+    const className = `form-group ${touched && error ? 'has-danger' : ''}`;
+
     return (
-      <div className="form-group">
+      <div className={className}>
         <label>{field.label}</label>
         <input className="form-control" type="text" {...field.input} />
-        {field.meta.error}
+        {touched ? error : ''}
       </div>
     );
   }
 
+  onSubmit(values) {
+    console.log(values);
+  }
+
   render() {
+    const { handleSubmit } = this.props;
+
     return (
-      <form>
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field name="title"
           label="Title"
           component={this.renderField} />
@@ -24,13 +40,13 @@ class PostsNew extends Component {
         <Field name="content"
           label="Content"
           component={this.renderField} />
+        <button type="submit" className="btn btn-primary">Submit</button>
       </form>
     );
   }
 }
 
 const validate = values => {
-  // console.log(values);
   const errors = {};
 
   if (!values.title) errors.title = 'Enter a title!';
