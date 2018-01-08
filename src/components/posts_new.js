@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createPost } from '../actions';
 
 class PostsNew extends Component {
   static get propTypes() {
     return {
-      handleSubmit: PropTypes.func
+      handleSubmit: PropTypes.func,
+      createPost: PropTypes.func,
+      history: PropTypes.object
     };
   }
 
@@ -24,7 +28,9 @@ class PostsNew extends Component {
   }
 
   onSubmit(values) {
-    console.log(values);
+    this.props.createPost(values, () => {
+      this.props.history.push('/');
+    });
   }
 
   render() {
@@ -42,7 +48,7 @@ class PostsNew extends Component {
           label="Content"
           component={this.renderField} />
         <button type="submit" className="btn btn-primary">Submit</button>
-        <Link to="/" classname="btn btn-danger">Cancel</Link>
+        <Link to="/" className="btn btn-danger">Cancel</Link>
       </form>
     );
   }
@@ -61,4 +67,6 @@ const validate = values => {
 export default reduxForm({
   validate,
   form: 'PostsNewForm'
-})(PostsNew);
+})(
+  connect(null, { createPost })(PostsNew)
+);
